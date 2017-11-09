@@ -1,7 +1,5 @@
-#Project 3
-
-Joshua Anickat (811-148-237)
-John Michael Kovachi (811-999-831)
+John Michael Kovachi 
+Joshua Anickat 
 
 ## Instructions
 
@@ -73,23 +71,6 @@ To run my code (after compiling it), type:
 	```
 	$ ./wc [-c | -m] [-lw] [file...]
 	```
-	
-## Reflection
-This project was a big relief for us. We were very happy to get away from 
-anything that had to do with the ncurses library. This project focused 
-completely around remaking our own versions of some unix system commands.
-After completing this project we have learned a lot about reading and writing
-files using low level file I/O. Also a great deal of option handling had to be
-done. This was probably the hardest aspect of the project because the user can
-enter various combinations of the options and our programs had to be able to 
-detect them. We started working on this project pretty early so that we
-wouldn't be cramming on the very last day. Because of this it has been a lot 
-less stressful. Also it was significantly easier to divide the work between
-us because each person can just take on a unix utility. We split them evenly
-based on their difficulties. I feel like this project has been the most
-helpful in terms of developing our coding skills and general knowledge of
-both unix and c++ unlike the ncurses project.
-
 
 ##Works Cited
 
