@@ -25,7 +25,6 @@ int month(const char * month) {
     if (strcmp(month,months[i]) == 0) {
       return i;
     }
-  //  cout << months[i] << endl;
   }
   return -1;
 
@@ -43,7 +42,6 @@ int monthlength(int year, int month) {
     return 31;
   }
   else if ((month == 1 && (year % 4 == 0 && year % 100 != 0)) || (year % 400 == 0)) return 29; //check for leap year 
-  //else if (month == 1 && (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)) return 29; //check for leap year 
   else if (month == 1) return 28;
   else return 30;
 }
@@ -66,7 +64,6 @@ void printmonth(int year, int month, int daycount) {
   }
   cout << " ";
   int count = 1;
-  //  cout << tinfo->tm_wday << endl;
   int mlength = monthlength(year,month);
   if ((year == 1752) && (month == 8)) mlength = 19;
   for (int i = 0; i < mlength; i++) {
@@ -85,9 +82,8 @@ void printmonth(int year, int month, int daycount) {
     if ((daycount % 7) == 0) {
       cout << endl;
       if ((count + 1) < 10) {
-	cout << " ";
+		cout << " ";
       }
-      //daycount--;
     }
     if ((i == 1) && (year == 1752) && (month == 8)) {
       count += 11;
@@ -125,8 +121,6 @@ Handles command line arguments and prints out specified calendar
 return exit value
 */
 int main (int argc, char * argv[]) {
-  //month(argv[2]);
-  //cout << "Su Mo Tu We Th Fr Sa" << endl;
   cout.setf(ios::unitbuf);
   time_t rtime;
   struct tm * tinfo;
@@ -135,10 +129,8 @@ int main (int argc, char * argv[]) {
   tinfo->tm_year = 2016 - 1900;
   tinfo->tm_mon = 10 - 1; //october 1st 2016
   tinfo->tm_mday = 1;
-  //for (int i = 0; i < 7; i++) {
   mktime(tinfo);
   int daycount = tinfo->tm_wday;
-  //cout << "Month:" << month(argv[2]) << endl;
   if (argc == 3 && atoi(argv[1]) >= 1 && atoi(argv[1]) <= 12 && checkdigits(argv[2],strnlen(argv[2],1000))) {
     tinfo->tm_mon = atoi(argv[1]) - 1;
     tinfo->tm_year = atoi(argv[2]) - 1900;
@@ -172,15 +164,3 @@ int main (int argc, char * argv[]) {
     cout << "Please enter in [[month] year] format" << endl;
   }
 }
-
-
-
-    //}
-
-
-
-
-
-
-
-

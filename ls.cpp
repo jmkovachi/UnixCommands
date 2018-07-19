@@ -453,7 +453,7 @@ void list(bool a_option, bool l_option)
 			}
 			struct group * g = getgrgid(sb.st_gid);
 			
-			cout << permissions(entries[i]);// << sb.st_nlink << " " << entries[i] << "\t" << u->pw_name << endl;
+			cout << permissions(entries[i]);
 			if(sb.st_nlink < 10)
 				cout << " " << sb.st_nlink;
 			else

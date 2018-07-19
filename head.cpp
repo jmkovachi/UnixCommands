@@ -39,7 +39,6 @@ int main(int argc, char * argv[])
 		for(int i = 1; i < argc; i++)
 		{
 			arguement = argv[i];
-			
 			if((i == 1) & (arguement.length() > 1) & (arguement.substr(0, 1) == "-"))
 			{
 				num_lines = arguement.substr(1, string::npos);

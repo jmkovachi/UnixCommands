@@ -50,7 +50,6 @@ This method is used to return the number of words in a given file.
 */
 int words(int fd, char * buf, int bytessum) {
 	int wordcount = 0;
-	//cout << buf << endl;
 	for (int i = 0; i < bytessum; i++) {
 		int icount = i;
 		if (!isspace(buf[i])) {
@@ -93,8 +92,6 @@ This method is used to obtain the number of characters in a given file.
 */
 int chars(int fd, char * bbuf, int bytessum) {
   std::setlocale(LC_ALL, "en_US.utf8");
-  //int nbytes = 0;
-  //int chars = 0;
   char newbuf[100000];
   lseek(fd,0,SEEK_SET);
   size_t nbytes = 0;                           // # bytes read
@@ -106,11 +103,9 @@ int chars(int fd, char * bbuf, int bytessum) {
     size_t sum = 0;                            // sum # bytes processed
     while((len = std::mbrtowc(&wc, newbuf+sum, nbytes-sum, &state)) > 0) {
       if (len == (size_t) -2) break;           // incomplete wchar
-      //std::wcout << "Next " << len << " bytes are the character " << wc << std::endl;
       sum    += len;                           // accumulate sum
       nchars += 1;                             // increment character count
     } // while
-    // handle incomplete wchar at end of buffer by seeking back a little
     if (sum < nbytes) lseek(fd, sum-nbytes, SEEK_CUR);
   }
   totalchar += nchars;
@@ -125,28 +120,6 @@ This method is used to actually list out a file and its properties.
 */
 int main(const int argc, const char * argv []) {
 	cout.setf(ios::unitbuf);
-  /*std::setlocale(LC_ALL, "en_US.utf8");
-  const char * filename = argv[1];
-  char buffer [BUFFSIZE];
-  int fd = open(filename, O_RDONLY);
-  int nbytes = 0;
-  int chars = 0;
-  while ((nbytes = read(fd, buffer, BUFFSIZE)) > 0) {
-    std::mbstate_t state = std::mbstate_t();
-    char * ptr = buffer;
-    const char* end = ptr + std::strlen(ptr);
-    int len;
-    wchar_t wc;
-    while((len = std::mbrtowc(&wc, ptr, end-ptr, &state)) > 0) {
-      std::wcout << "Next " << len << " bytes are the character " << wc << std::endl;
-      ptr += len;
-      chars += 1;
-      if (ptr > end) break;
-    } // while
-  } // while
-  std::wcout << "# chars = " << chars << std::endl;
-  close(fd);*/
-  
   
   for (int i = 1; i < argc; i++) {
 	if (strcmp(argv[i],"-c") == 0) {
@@ -166,7 +139,6 @@ int main(const int argc, const char * argv []) {
 		flagcount++;
 	}
 	else if (strcmp(argv[i],"-lw") == 0) {
-		//cout << "HI" << endl;
 		lflag = true;
 		wflag = true;
 		flagcount++;
@@ -177,7 +149,6 @@ int main(const int argc, const char * argv []) {
 	}
   }
   for (int i = 1; i < argc; i++) {
-	  //cout << argc << endl;
 	if (flagcount == 0 && strcmp(argv[1],"-") != 0) {
 		int n = open(argv[i],O_RDONLY);
 		if (n == -1) {
@@ -207,18 +178,12 @@ int main(const int argc, const char * argv []) {
 		cflag = true;
 		char buf[100000];
 		int bytessum = 0;
-		//int y = 0;
-		//cout << "HI" << endl;
 			char copybuf[100000];
-			//cout << "HI" << endl;
-			//int o = open;
 			
 			int y = 0;
 			int z = 0;
 			while((y = read(STDIN_FILENO,copybuf,1)) > 0){
-				//cout << "HI" << endl;
 				buf[z] = copybuf[0];
-				//cout << buf[i];
 				bytessum += y;
 				z++;
 			}
@@ -228,24 +193,17 @@ int main(const int argc, const char * argv []) {
 			cout << endl << lines(0,buf,bytessum) << " " << words(0,buf,bytessum) << " " << bytes(0,buf,bytessum) << endl;
 	}
 	else if(strcmp(argv[i],"-lw") != 0 && strcmp(argv[i],"-w") != 0 && strcmp(argv[i],"-l") != 0 && strcmp(argv[i],"-m") != 0 && strcmp(argv[i],"-c") != 0) {
-		//cout << argv[i] << endl;
 		int n;
 		char buf[100000];
 		int bytessum = 0;
-		//cout << flagcount << endl;
-		//cout << argc << endl;
 		if ((strcmp(argv[i],"-")) == 0 || flagcount == (argc-1)) {
 			n = STDIN_FILENO;
 			char copybuf[100000];
-			//cout << "HI" << endl;
-			//int o = open;
 			
 			int y = 0;
 			int z = 0;
 			while((y = read(STDIN_FILENO,copybuf,1)) > 0){
-				//cout << "HI" << endl;
 				buf[z] = copybuf[0];
-				//cout << buf[i];
 				bytessum += y;
 				z++;
 			}
@@ -294,37 +252,24 @@ int main(const int argc, const char * argv []) {
 		int i = 0;
 		
 			while((y = read(STDIN_FILENO,buf,1)) > 0){
-				//cout << "HI" << endl;
 				copybuf[i] = buf[0];
-				//cout << buf[i];
 				bytessum += y;
 				i++;
 			}
-				//cout << copybuf << endl;
 			if (y == -1) {
 				perror("wc");
 			}
-			//cout << endl << endl << buf;
 			cout << endl << lines(0,copybuf,bytessum) << " " << words(0,copybuf,bytessum) << " " << bytes(0,copybuf,bytessum) << endl; 
-			
-			//delete[] copybuf;
-			//cout << buf << endl;
-			//cout << buf << endl;
   }
   if (filecount == 0 && flagcount == argc-1) {
-	  	//n = STDIN_FILENO;
 			char copybuf[100000];
-			//cout << "HI" << endl;
-			//int o = open;
 			int bytessum = 0;
 			char buf[100000];
 			int n = STDIN_FILENO;
 			int y = 0;
 			int i = 0;
 			while((y = read(STDIN_FILENO,copybuf,1)) > 0){
-				//cout << "HI" << endl;
 				buf[i] = copybuf[0];
-				//cout << buf[i];
 				bytessum += y;
 				i++;
 			}

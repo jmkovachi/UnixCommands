@@ -1,7 +1,3 @@
-John Michael Kovachi 
-
-Joshua Anickat 
-
 ## Instructions
 
 To clean my code (i.e., remove any compiled files), type:

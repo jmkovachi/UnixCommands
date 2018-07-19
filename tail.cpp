@@ -8,7 +8,6 @@
 #include <ctype.h>
 #include <string.h>
 
-//int stdin = 0;
 int fflag = 0;
 
 using namespace std;
@@ -21,69 +20,51 @@ This method prints the trailing lines of a given file.
 void printlines(const char * pathname, int lines) {
 	cout.setf(ios::unitbuf);
 	int n;
-	//cout << pathname << endl;
-  if (strcmp(pathname,"-") == 0) {
-	  //cout << "HI" << endl;
+	if (strcmp(pathname,"-") == 0) {
 	  n = STDIN_FILENO;
-  }
-  else {
-	n = open(pathname, O_RDONLY);
-	if (n == -1) {
-		perror("tail");
-		return;
+	} else {
+		n = open(pathname, O_RDONLY);
+		if (n == -1) {
+			perror("tail");
+			return;
+		}
 	}
-  }
-  char buffer[100000];
-  int x = 0;
-  int bytesum = 0;
-  if (strcmp(pathname,"-") == 0) {
-	//int bytessum = 0;
-	int y = 0;
-	char copybuf[100000];
-	int i = 0;
-	//cout << "HI" << endl;
-	while((y = read(STDIN_FILENO,copybuf,1)) > 0){
-		//cout << "HI" << endl;
-		buffer[i] = copybuf[0];
-		//cout << buf[i];
-		bytesum += y;
-		i++;
+	char buffer[100000];
+	int x = 0;
+	int bytesum = 0;
+	if (strcmp(pathname,"-") == 0) {
+		int y = 0;
+		char copybuf[100000];
+		int i = 0;
+		while((y = read(STDIN_FILENO,copybuf,1)) > 0){
+			buffer[i] = copybuf[0];
+			bytesum += y;
+			i++;
+		}
+	} else {
+		while ((x = read(n,buffer,100000)) > 0) {bytesum += x;} //bytesum is sum of bytes in file
 	}
-  }
-  else {
-	while ((x = read(n,buffer,100000)) > 0) {bytesum += x;} //bytesum is sum of bytes in file
-  }
-  //cout << buffer << endl;
-  //cout << "HI" << endl;
-  //cout << buffer << endl;
-  //char buf;
- 
-  int linecount = 1;
-   lseek(n,0,SEEK_SET);
- // while (read(n,&buf,1) > 0) { if (buf == '\n') linecount++;} //counts number of lines in file
- for (int i = 0; i < bytesum; i++) {
-	 if (buffer[i] == '\n') {
-		 linecount++;
-	 }
- }
-  //cout << linecount << endl;
-  int * lineindex = new int [linecount];
+
+	int linecount = 1;
+	lseek(n,0,SEEK_SET);
+	for (int i = 0; i < bytesum; i++) {
+		if (buffer[i] == '\n') {
+			linecount++;
+		}
+	}
+	int * lineindex = new int [linecount];
   
- // cout << bytesum << endl;
-  int linecount2 = 0;
+	int linecount2 = 0;
   for (int i = 0; i < bytesum; i++) {
     if (buffer[i] == '\n') {
       lineindex[linecount2] = i; //stores index of newline character into an int
       linecount2++; //increments to next index of lineindex array
     }
   }
-  //cout << lineindex[linecount - 1] << endl;
   if (lines > linecount) {
-	//cout << "h" << endl;
 	lseek(n,0,SEEK_SET);
   }
   else {
-	 //cout << "HI" << endl;
 	lseek(n,lineindex[(linecount-lines)-2]+1,SEEK_SET);
   }
   
@@ -112,13 +93,12 @@ void printlines(const char * pathname, int lines) {
 	  cout << buff;
   }
   if (fflag == 1) {
-	 // cout << "hi" << endl;
-	  char newbuf[1000];
-	  while ((x = read(n,newbuf,1)) != -1) {
-		if (x > 0) {
-			write(STDOUT_FILENO,newbuf,1);
-		}  
-	  }
+	char newbuf[1000];
+	while ((x = read(n,newbuf,1)) != -1) {
+	if (x > 0) {
+		write(STDOUT_FILENO,newbuf,1);
+	}  
+	}
   }
   //now seek for number of lines - int lines. Read from there
   delete[] lineindex;
@@ -133,7 +113,6 @@ void printbytes(const char * pathname, int bytes) {
   cout.setf(ios::unitbuf);
   int n;
   if (strcmp(pathname,"-") == 0) {
-	  //cout << "HI" << endl;
 	  n = STDIN_FILENO;
   }
   else {
@@ -144,12 +123,12 @@ void printbytes(const char * pathname, int bytes) {
 	}
   }
   int filesize = lseek(n,0,SEEK_END);
-  //  cout << "FILESIZE: " << filesize << endl;
+  
   int endbytes = filesize-bytes;
   if (bytes > filesize) {
     endbytes = filesize;
     int x = lseek(n,0,SEEK_SET);
-	//cout << x << endl;
+	
 	if (x == -1) {
 		perror("lseek");
 	}
@@ -158,9 +137,7 @@ void printbytes(const char * pathname, int bytes) {
     lseek(n,endbytes,SEEK_SET);
   }
   char buf [100000];
-  // while (x = read(n,buf,100) != 0) write(STDOUT_FILENO,buf,x);
-  //int sum = 0;
-  //int bytesread;
+  
   int x = 0;
   if (strcmp(pathname,"-")) {
 	  for (int z = endbytes; z < filesize; z++) {
@@ -168,29 +145,21 @@ void printbytes(const char * pathname, int bytes) {
 	  }
   }
   if (strcmp(pathname,"-") == 0) {
-	//int bytessum = 0;
 	int y = 0;
 	char copybuf[100000];
 	int i = 0;
 	filesize = 0;
-	//cout << "HI" << endl;
 	while((y = read(STDIN_FILENO,copybuf,1)) > 0){
-		//cout << "HI" << endl;
 		buf[i] = copybuf[0];
-		//cout << buf[i];
 		filesize += y;
 		i++;
 	}
-	//cout << buf << endl << "hi" << endl;
 	endbytes = filesize-bytes;
 	if (bytes > filesize) {
 		endbytes = 0;
 	}
-	//cout << endl << endbytes << endl;
-	//cout << buf[endbytes] << endl;
   }
   else {
-	  //cout << lseek(n,0,SEEK_CUR) << endl;
 	  while((x = read(n,buf,100000)) > 0){}
 	  if (x == -1) {
 		perror("read");
@@ -198,10 +167,7 @@ void printbytes(const char * pathname, int bytes) {
 	  cout << buf;
   }
   if (strcmp(pathname,"-") == 0) {
-	 // cout << "HI" << endl;
-	  //cout << endl;
 	  for (int z = endbytes; z < filesize; z++) {
-		  //cout << endl << buf[z];
 		  cout << buf[z];
 	  }
   }
@@ -213,7 +179,6 @@ void printbytes(const char * pathname, int bytes) {
 		}  
 	  }
   }
-  //write(STDOUT_FILENO,buf,endbytes);
 }
 
 
@@ -224,20 +189,8 @@ This is the main method of the function that handles the arguements and options.
 @return Returns 0 on success.
 */
 int main(int argc, char * argv[]) {
-  //printlines(argv[2],atoi(argv[1]));
 	
 	if (argc < 6) {
-	  //char ** options = new char * [argc-1];
-	  //int i = 0;
-	  //cout << "HI" << endl;
-	  /*while (getopt(argc,argv,options[i]) != -1) {
-		i++;
-		if (i == argc-2) {
-			break;
-		}
-	  }*/
-	  //cout << options[0];
-	  //int fflag = 0;
 	  int cflag = 0;
 	  int nflag = 0;
 	  int number = 0;
@@ -272,7 +225,6 @@ int main(int argc, char * argv[]) {
 					number = atoi(argv[j]);
 				}
 				else if (j == argc-1) {
-					//cout << "HI" << endl;
 					if (strcmp(argv[j-1],"-n") == 0) {
 						nflag = 1;
 					}
@@ -292,7 +244,6 @@ int main(int argc, char * argv[]) {
 					if (digbool) {
 						filename = "-";
 					}
-					//stdin = 1;
 				}
 				else {
 					cout << "Format incorrect." << endl;
@@ -327,7 +278,6 @@ int main(int argc, char * argv[]) {
 			}
 		}
 	  }
-	  //int count = 0;
 	  if (nflag == 1) {
 		  printlines(filename.c_str(),number);
 	  }
@@ -335,7 +285,6 @@ int main(int argc, char * argv[]) {
 		  printbytes(filename.c_str(),number);
 	  }
 	  else if (argc == 2 && strcmp(argv[1],"-f") == 0) {
-		 // cout << "HI" << endl;
 		printlines("-",10);  
 	  }
 	  else if (argc == 1) {

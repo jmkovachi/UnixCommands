@@ -16,8 +16,7 @@ This is the main method of the function that handles the arguements and options.
 @param argv An array containing the arguements.
 @return Returns 0 on success.
 */
-int main(int argc, char * argv[])
-{
+int main(int argc, char * argv[]) {
 	cout.setf(std::ios::unitbuf);
 	cerr.setf(std::ios::unitbuf);
 	
@@ -29,20 +28,17 @@ int main(int argc, char * argv[])
 	{
 		arg = argv[i];
 		
-		if((arg.substr(0, 1) == "-") & options)
-		{
+		if((arg.substr(0, 1) == "-") & options) {
 			if(arg.length() > 2)
 				cerr << "ln: invalid option -- `" << arg.substr(1, 1) << "'" << endl;
-			else if((arg.length() == 2) & (arg.substr(1, 1) == "s"))
-			{
+			else if((arg.length() == 2) & (arg.substr(1, 1) == "s")) {
 				s_option = true;
 				options = false;
 				continue;
 			}
 		}
 		
-		if(stat(argv[i], &sb) == 0)
-		{
+		if(stat(argv[i], &sb) == 0) {
 			if((S_ISDIR(sb.st_mode)) | (S_ISCHR(sb.st_mode)) | (S_ISREG(sb.st_mode)) | 
 			(S_ISFIFO(sb.st_mode)) | (S_ISLNK(sb.st_mode)) | (S_ISSOCK(sb.st_mode)))
 			{
@@ -62,14 +58,11 @@ int main(int argc, char * argv[])
 					exit(EXIT_FAILURE);
 				}
 			}
-		}
-		else if((s_option == false) & (i != 2))	 
+		} else if((s_option == false) & (i != 2))	 
 		{
 				cerr << "ln: accessing `" << argv[i] << "': No such file or directory" << endl;
 				exit(EXIT_FAILURE);
-		}
-		//else
-		{
+		} else {
 			if(s_option)
 			{ 
 				errno = 0;
